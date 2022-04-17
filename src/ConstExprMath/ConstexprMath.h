@@ -1,33 +1,103 @@
 #pragma once
 
-constexpr double pow(double in, int pow)
+#include <type_traits>
+
+template<typename X, typename N>
+constexpr X pow(X in, N pow) requires std::is_integral_v<N>
 {
-    double out = in;
-    for(int i=0; i<pow; ++i)
+    X out = 1;
+    for(N i=0; i<pow; ++i)
     {
         out*=in;
     }
     return out;
 }
 
-constexpr double factorial(double in)
+template<typename X>
+constexpr X factorial(X in) requires std::is_integral_v<X>
 {
-    double out = in;
+    X out = 1;
     while(in>1)
     {
-        out*=(in-1);
+        out*=in;
         --in;
     }
     return out;
 }
 
-constexpr double cos(double in)
+template<typename T, std::size_t N>
+struct cosstruct
 {
-    return 1-pow(in,2)/factorial(2)+pow(in,4)/factorial(4)-pow(in,6)/factorial(6)+pow(in,8)/factorial(8);
-}
+    static constexpr T value(T in) requires std::is_floating_point_v<T>
+    {
+        if constexpr((N%2))
+        {
+            return cosstruct<T,N-1>::value(in)-pow(in,N*2)/factorial(N*2);
+        }
+        return cosstruct<T,N-1>::value(in)+pow(in,N*2)/factorial(N*2);
+    }
+};
 
-constexpr double sin(double in)
+template<typename T>
+struct cosstruct<T,0>
 {
-    return in-pow(in,3)/factorial(3)+pow(in,5)/factorial(5)-pow(in,7)/factorial(7)+pow(in,9)/factorial(9);
-}
+    static constexpr T value(T in)
+    {
+        return 1;
+    }
+};
+
+template<typename T, std::size_t N = 4>
+constexpr auto cos = cosstruct<T,N>::value;
+
+
+template<typename T, std::size_t N>
+struct sinstruct 
+{
+    static constexpr T value(T in) requires std::is_floating_point_v<T>
+    {
+        if constexpr((N%2))
+        {
+            return sinstruct<T,N-1>::value(in)-pow(in,N*2+1)/factorial(N*2+1);
+        }
+        return sinstruct<T,N-1>::value(in)+pow(in,N*2+1)/factorial(N*2+1);
+    }
+};
+
+template<typename T>
+struct sinstruct<T,0>
+{
+    static constexpr T value(T in)
+    {
+        return in;
+    }
+};
+
+template<typename T, std::size_t N = 4 >
+constexpr auto sin = sinstruct<T,N>::value;
+
+
+template<typename T, std::size_t N>
+struct tanstruct 
+{
+    static constexpr T value(T in) requires std::is_floating_point_v<T>
+    {
+        return tanstruct<T,N-1>::value(in)+N*pow(in,N*2-1)/factorial(N*2+1);
+    }
+};
+
+template<typename T>
+struct tanstruct<T,0>
+{
+    static constexpr T value(T in)
+    {
+        return in;
+    }
+};
+
+template<typename T,std::size_t N = 4 >
+constexpr auto tan = tanstruct<T,N>::value;
+
+
+
 

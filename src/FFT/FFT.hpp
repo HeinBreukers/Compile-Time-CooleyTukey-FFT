@@ -5,6 +5,7 @@
 
 #include "ConstexprMath.h"
 #include <cstdint>
+#include <array>
 
 namespace CTFFT
 {
@@ -30,19 +31,19 @@ constexpr Complex multiply(const Complex& in, const Complex& in2){return Complex
 constexpr double pi = 3.14159265;
 
 // Cooley-Tukey FFT
-template<unsigned int size>
-constexpr ComplexArray<size> FFT(const ComplexArray<size>& in, const int32_t cursize, const int32_t stride, const int32_t begin = 0)
+template<std::size_t size>
+constexpr std::array<Complex,size> FFT(const std::array<Complex,size>& in, const int32_t cursize, const int32_t stride, const int32_t begin = 0)
 {
-    ComplexArray<size> out;
+    std::array<Complex,size> out;
     if (cursize==1)
     {
-      	out.arr[0] = in.arr[begin];
+      	out[0] = in[begin];
         return out;
     }
     const unsigned int size_over2 = cursize>>1;
     const unsigned int stride_times2 = stride<<1;
-    ComplexArray<size> buffer= {};
-    ComplexArray<size> buffer2= {};
+    std::array<Complex,size> buffer= {};
+    std::array<Complex,size> buffer2= {};
     buffer = FFT<size>(in, size_over2, stride_times2, begin);
     buffer2 = FFT<size>(in, size_over2, stride_times2, begin +stride);
 
@@ -50,11 +51,11 @@ constexpr ComplexArray<size> FFT(const ComplexArray<size>& in, const int32_t cur
     for (int k =0; k<(size_over2); k+=stride)
     {
         const double calc = 2*pi/static_cast<double>(cursize)*static_cast<double>(k);       
-        Complex t(cos(calc), -sin(calc));
-        auto p = buffer.arr[k];  
-        auto q = multiply(buffer2.arr[k],t);
-        out.arr[k] = add(p,q);
-        out.arr[k+size_over2] = sub(p,q);
+        Complex t(cos<double,5>(calc), -sin<double,5>(calc));
+        auto p = buffer[k];  
+        auto q = multiply(buffer2[k],t);
+        out[k] = add(p,q);
+        out[k+size_over2] = sub(p,q);
     }
     return out;
 }
