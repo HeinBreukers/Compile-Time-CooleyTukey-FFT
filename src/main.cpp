@@ -11,13 +11,13 @@ consteval auto as_constant(auto val)
 
 int main() {
   constexpr int size = 8;
-  constexpr int stride = 1;
-  constexpr std::array<Complex,size> in = {Complex(1,0),Complex(2,-1), Complex(0,-1), Complex(-1,2),Complex(1,0),Complex(2,-1), Complex(0,-1), Complex(-1,2)};
+  //constexpr int stride = 1;
+  constexpr std::array<std::complex<double>,size> in = {std::complex<double>(1,0),std::complex<double>(2,-1), std::complex<double>(0,-1), std::complex<double>(-1,2),std::complex<double>(1,0),std::complex<double>(2,-1), std::complex<double>(0,-1), std::complex<double>(-1,2)};
 
-  constexpr auto out = as_constant(FFT(in,size,stride));
+  const auto out = as_constant(FFT(in));
   for(auto comp:out)
   {
-    std::cout<<comp.Real<<','<<comp.Imag<<"i\n";
+    std::cout<<comp.real()<<','<<comp.imag()<<"i\n";
   }
   return 0;
 }

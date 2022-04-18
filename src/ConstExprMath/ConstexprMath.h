@@ -2,6 +2,9 @@
 
 #include <type_traits>
 
+namespace CTM
+{
+
 template<typename X, typename N>
 constexpr X pow(X in, N pow) requires std::is_integral_v<N>
 {
@@ -98,6 +101,4 @@ struct tanstruct<T,0>
 template<typename T,std::size_t N = 4 >
 constexpr auto tan = tanstruct<T,N>::value;
 
-
-
-
+}
