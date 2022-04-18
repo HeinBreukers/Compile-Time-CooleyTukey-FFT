@@ -4,6 +4,7 @@ Compile Time radix-2 DFS Cooley-Tukey FFT implementation
 Compiler Explorer: https://godbolt.org/z/9j61adfTn
 
 TODO:  
+Precompute twiddle factor
 Optimize & Benchmark vs other fft implementation  
 Inverse FFT  
 Sin/Cos transfrom  
