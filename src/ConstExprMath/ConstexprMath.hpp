@@ -1,6 +1,7 @@
 #pragma once
 
 #include <type_traits>
+#include <array>
 
 namespace CTM
 {
@@ -81,24 +82,54 @@ constexpr auto sin = sinstruct<T,N>::value;
 
 
 template<typename T, std::size_t N>
-struct tanstruct 
+struct fastaccstruct 
 {
-    static constexpr T value(T in) requires std::is_floating_point_v<T>
+    static constexpr T value(std::array<T,N>  in)
     {
-        return tanstruct<T,N-1>::value(in)+N*pow(in,N*2-1)/factorial(N*2+1);
+        std::array<T,N/2> intermediate;
+        for(int i=0;i<N/2;++i)
+        {
+            intermediate[i] = in[i] + in[i+N/2];
+        }
+        return fastaccstruct<T,N/2>::value(intermediate);
     }
 };
 
 template<typename T>
-struct tanstruct<T,0>
+struct fastaccstruct<T,1>
 {
-    static constexpr T value(T in)
+    static constexpr T value(std::array<T,1> in)
     {
-        return in;
+        return in[0];
     }
 };
 
-template<typename T,std::size_t N = 4 >
-constexpr auto tan = tanstruct<T,N>::value;
-
+template<typename T, std::size_t N>
+constexpr T fastacc(std::array<T,N> in)
+{
+    //TODO proper forwarding
+    return fastaccstruct<T,N>::value(std::forward<std::array<T,N>>(in));
 }
+
+
+template<std::size_t size>
+float fastaccumulate(std::array<float,size> in)
+{
+    std::array<float,size/2> intermediate;
+    for(int i=0;i<size/2;++i)
+    {
+        intermediate[i] = in[i] + in[i+size/2];
+    }
+    return fastaccumulate(intermediate);
+}
+
+
+template<>
+float fastaccumulate(std::array<float,1> in)
+{
+    return in[0];
+}
+
+
+
+}// end namespace CTM

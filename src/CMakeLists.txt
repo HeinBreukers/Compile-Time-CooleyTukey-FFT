@@ -2,6 +2,8 @@ cmake_minimum_required(VERSION 3.2)
 project(CTFFT)
 
 include_directories(FFT)
+include_directories(FIR)
+include_directories(IIR)
 include_directories(ConstExprMath)
 
 set(SOURCE_FILES main.cpp)
