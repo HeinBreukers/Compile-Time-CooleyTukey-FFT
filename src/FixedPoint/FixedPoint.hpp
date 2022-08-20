@@ -5,12 +5,14 @@
 template<typename T, size_t Point> requires std::is_integral_v<T>
 struct fixed
 {
+    // Constructor
     fixed()
     {
         ConstructorBase();
     }
 
     //TODO look into forwarding
+    // Constructor converting integer type to fixed
     template <typename I> requires std::is_integral_v<I>
     explicit fixed(I value): 
     m_value(std::move(value<<Point))
@@ -18,13 +20,7 @@ struct fixed
         ConstructorBase();
     }
 
-    template <typename I> requires std::is_integral_v<I>
-    fixed& operator=(I value)
-    {
-        m_value = std::move(value<<Point);
-        return *this;
-    }  
-
+    // Constructor converting floating type to fixed
     template <typename F> requires std::is_floating_point_v<F>
     explicit fixed(F value): 
     m_value(std::move(static_cast<T>(value*(1<<Point))))
@@ -32,6 +28,15 @@ struct fixed
         ConstructorBase();
     }
 
+    // Assignment operator converting interger type to fixed
+    template <typename I> requires std::is_integral_v<I>
+    fixed& operator=(I value)
+    {
+        m_value = std::move(value<<Point);
+        return *this;
+    }  
+
+    // Assignment operator converting floating type to fixed
     template <typename F> requires std::is_floating_point_v<F>
     fixed& operator =(F value)
     {
@@ -39,31 +44,35 @@ struct fixed
         return *this;
     }
 
+    // Conversion operator converting fixed to integer type
     template <typename I> requires std::is_integral_v<I>
     explicit operator I()
     {
         return static_cast<I>(m_value>>Point);
     }
 
+    // Conversion operator converting fixed to floating type
     template <typename F> requires std::is_floating_point_v<F>
     explicit operator F()
     {
         return static_cast<F>(m_value)/static_cast<F>(1<<Point);
     }
 
-
+    // Addition operator
     fixed operator + (const fixed& obj) {
         fixed<T,Point> res;
         res.m_value=m_value+obj.m_value;
         return res;
     }
 
+    // Substraction operator
     fixed operator - (const fixed& obj) {
         fixed<T,Point> res;
         res.m_value=m_value-obj.m_value;
         return res;
     }
 
+    // Multiplication operator
     fixed operator * (const fixed& obj) 
     {
         //include unsinged
@@ -87,6 +96,7 @@ struct fixed
         return res;
     }
 
+    // Division operator
     fixed operator / (const fixed& obj) 
     {
         //include unsinged
@@ -110,21 +120,25 @@ struct fixed
         return res;
     }
 
+    // Static function returning the max value of the fixed type
     [[nodiscard]] static constexpr double range() noexcept
     {
         //TODO correct calculation for singed unsigned
         return (1<<(sizeof(T)*8-Point-1))-1;
     }
 
+    // Static function returning the max precision of the fixed type
     [[nodiscard]] static constexpr double precision() noexcept
     {
         return 1.0/(1<<Point);
     }
 
     private:
+    // Constructor Base
     void ConstructorBase()
     {
         static_assert(Point<(sizeof(T)*8));
     }
+
     T m_value = 0;
 };
