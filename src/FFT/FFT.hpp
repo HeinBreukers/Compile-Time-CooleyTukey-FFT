@@ -16,7 +16,7 @@ namespace CTFFT
 constexpr double pi = 3.14159265358979323846;
 
 // radix-2 Cooley-Tukey FFT 
-template<typename T, std::size_t size>
+template<typename T, size_t size>
 constexpr std::array<std::complex<T>,size>  FFT(std::array<std::complex<T>,size> in) requires std::is_floating_point_v<T>
 {
     if (size==1)
@@ -24,11 +24,11 @@ constexpr std::array<std::complex<T>,size>  FFT(std::array<std::complex<T>,size>
         return in;
     }
 
-    const int32_t size_over2 = size/2;
+    const size_t size_over2 = size/2;
 
     std::array<std::complex<T>,size_over2> even;
     std::array<std::complex<T>,size_over2> odd;
-    for (int i = 0; 2 * i < size; i++) 
+    for (size_t i = 0; static_cast<size_t>(2) * i < size; i++) 
     {
         even[i] = in[2*i];
         odd[i] = in[2*i+1];
@@ -49,4 +49,4 @@ constexpr std::array<std::complex<T>,size>  FFT(std::array<std::complex<T>,size>
     }
     return in;
 }
-} //namespace end
+} //namespace CTFFT

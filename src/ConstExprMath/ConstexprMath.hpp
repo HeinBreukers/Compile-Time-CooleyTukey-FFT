@@ -104,14 +104,15 @@ struct fastaccstruct<T,1>
     }
 };
 
+// N has to be power of 2
 template<typename T, std::size_t N>
-constexpr T fastacc(std::array<T,N> in)
+constexpr T fastacc(std::array<T,N> in) 
 {
     //TODO proper forwarding
     return fastaccstruct<T,N>::value(std::forward<std::array<T,N>>(in));
 }
 
-
+/*
 template<std::size_t size>
 float fastaccumulate(std::array<float,size> in)
 {
@@ -129,7 +130,7 @@ float fastaccumulate(std::array<float,1> in)
 {
     return in[0];
 }
-
+*/
 
 
 }// end namespace CTM
