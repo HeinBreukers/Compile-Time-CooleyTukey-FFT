@@ -28,6 +28,22 @@ struct fixed
         ConstructorBase();
     }
 
+    // Conversion operator converting fixed to integer type
+    template <typename I> requires std::is_integral_v<I>
+    explicit operator I()
+    {
+        return static_cast<I>(m_value>>Point);
+    }
+
+    // Conversion operator converting fixed to floating type
+    template <typename F> requires std::is_floating_point_v<F>
+    explicit operator F()
+    {
+        return static_cast<F>(m_value)/static_cast<F>(1<<Point);
+    }
+
+    //Assignment Operators
+
     // Assignment operator converting interger type to fixed
     template <typename I> requires std::is_integral_v<I>
     fixed& operator=(I value)
@@ -44,20 +60,46 @@ struct fixed
         return *this;
     }
 
-    // Conversion operator converting fixed to integer type
-    template <typename I> requires std::is_integral_v<I>
-    explicit operator I()
+    // Incremental Operators
+
+    // Pre Increment Operator
+    fixed operator++()
     {
-        return static_cast<I>(m_value>>Point);
+        fixed res;
+        m_value = m_value+(1<<Point);
+        res.m_value = m_value;
+        return res;
     }
 
-    // Conversion operator converting fixed to floating type
-    template <typename F> requires std::is_floating_point_v<F>
-    explicit operator F()
+    // Post Increment Operator
+    fixed operator++(int)
     {
-        return static_cast<F>(m_value)/static_cast<F>(1<<Point);
+        fixed res;
+        res.m_value = m_value;
+        m_value = m_value+(1<<Point);
+        return res;
     }
 
+    // Pre Increment Operator
+    fixed operator--()
+    {
+        fixed res;
+        m_value = m_value-(1<<Point);
+        res.m_value = m_value;
+        return res;
+    }
+
+    // Post Increment Operator
+    fixed operator--(int)
+    {
+        fixed res;
+        res.m_value = m_value;
+        m_value = m_value-(1<<Point);
+        return res;
+    }
+
+    // Arithmetic Operators
+    
     // Addition operator
     fixed operator + (const fixed& obj) {
         fixed<T,Point> res;
@@ -69,6 +111,13 @@ struct fixed
     fixed operator - (const fixed& obj) {
         fixed<T,Point> res;
         res.m_value=m_value-obj.m_value;
+        return res;
+    }
+
+    // Negative operator
+    fixed operator - () {
+        fixed<T,Point> res;
+        res.m_value=-m_value;
         return res;
     }
 
@@ -119,6 +168,52 @@ struct fixed
         }
         return res;
     }
+
+    // Relational Operators
+
+    // Equality Operator
+    bool operator == (const fixed& obj)
+    {
+        return m_value==obj.m_value;
+    }
+
+    // Non Equality Operator
+    bool operator != (const fixed& obj)
+    {
+        return m_value!=obj.m_value;
+    }
+
+    // Greater than Operator
+    bool operator > (const fixed& obj)
+    {
+        return m_value>obj.m_value;
+    }
+
+    // Greater than or equal Operator
+    bool operator >= (const fixed& obj)
+    {
+        return m_value>=obj.m_value;
+    }
+
+    // Smaller than Operator
+    bool operator < (const fixed& obj)
+    {
+        return m_value<obj.m_value;
+    }
+
+    // Smaller than or equal Operator
+    bool operator <= (const fixed& obj)
+    {
+        return m_value<=obj.m_value;
+    }
+
+    // Stream Operator
+    friend std::ostream& operator<<(std::ostream& os, const fixed& obj)
+    {
+        // conversion because of const correctness
+        return os << static_cast<double>(obj.m_value)/static_cast<double>(1<<Point);;
+    }
+
 
     // Static function returning the max value of the fixed type
     [[nodiscard]] static constexpr double range() noexcept
