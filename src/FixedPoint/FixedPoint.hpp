@@ -130,15 +130,15 @@ struct fixed
         {           
             res.m_value=static_cast<int8_t>( (static_cast<int16_t>(obj.m_value)*static_cast<int16_t>(m_value)) >>Point);            
         }
-        if constexpr(std::is_same_v<T,int16_t>)
+        else if constexpr(std::is_same_v<T,int16_t>)
         {
             res.m_value=static_cast<int16_t>( (static_cast<int32_t>(obj.m_value)*static_cast<int32_t>(m_value)) >>Point);
         }
-        if constexpr(std::is_same_v<T,int32_t>)
+        else if constexpr(std::is_same_v<T,int32_t>)
         {
             res.m_value=static_cast<int32_t>( (static_cast<int64_t>(obj.m_value)*static_cast<int64_t>(m_value)) >>Point);
         }
-        if constexpr(std::is_same_v<T,int64_t>)
+        else if constexpr(std::is_same_v<T,int64_t>)
         {
             //handle overflow error or give warning
         }
@@ -154,15 +154,15 @@ struct fixed
         {           
             res.m_value=static_cast<int8_t>( (static_cast<int16_t>(m_value)<<Point) / static_cast<int16_t>(obj.m_value));            
         }
-        if constexpr(std::is_same_v<T,int16_t>)
+        else if constexpr(std::is_same_v<T,int16_t>)
         {
             res.m_value=static_cast<int16_t>( (static_cast<int32_t>(m_value)<<Point) / static_cast<int32_t>(obj.m_value));
         }
-        if constexpr(std::is_same_v<T,int32_t>)
+        else if constexpr(std::is_same_v<T,int32_t>)
         {
             res.m_value=static_cast<int32_t>( (static_cast<int64_t>(m_value)<<Point) / static_cast<int64_t>(obj.m_value));
         }
-        if constexpr(std::is_same_v<T,int64_t>)
+        else if constexpr(std::is_same_v<T,int64_t>)
         {
             //handle overflow error or give warning
         }

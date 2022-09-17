@@ -1,6 +1,6 @@
 #pragma once
 
-#include "ConstexprMath.hpp"
+#include "Math.hpp"
 
 #include <array>
 
@@ -13,5 +13,5 @@ constexpr T FIR(std::array<T,size> in, std::array<T,size> weights)
         in[i] = in[i]*weights[i];
     }
 
-    return CTM::fastacc(in);
+    return Internal::fastacc(in);
 }

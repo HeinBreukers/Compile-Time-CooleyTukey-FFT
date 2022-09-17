@@ -4,7 +4,7 @@ project(CTFFT)
 include_directories(FFT)
 include_directories(FIR)
 include_directories(IIR)
-include_directories(ConstExprMath)
+include_directories(Internal/Math)
 include_directories(FixedPoint)
 
 set(SOURCE_FILES main.cpp)
