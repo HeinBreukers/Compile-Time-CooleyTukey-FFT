@@ -80,7 +80,7 @@ struct fixed
         return res;
     }
 
-    // Pre Increment Operator
+    // Pre Decrement Operator
     fixed operator--()
     {
         fixed res;
@@ -89,7 +89,7 @@ struct fixed
         return res;
     }
 
-    // Post Increment Operator
+    // Post Decrement Operator
     fixed operator--(int)
     {
         fixed res;
@@ -124,7 +124,7 @@ struct fixed
     // Multiplication operator
     fixed operator * (const fixed& obj) 
     {
-        //include unsinged
+        //TODO include unsinged
         fixed<T,Point> res;
         if constexpr(std::is_same_v<T,int8_t>)
         {           
@@ -140,7 +140,7 @@ struct fixed
         }
         else if constexpr(std::is_same_v<T,int64_t>)
         {
-            //handle overflow error or give warning
+            //TODO handle overflow error or give warning
         }
         return res;
     }
@@ -148,7 +148,7 @@ struct fixed
     // Division operator
     fixed operator / (const fixed& obj) 
     {
-        //include unsinged
+        //TODO include unsinged
         fixed<T,Point> res;
         if constexpr(std::is_same_v<T,int8_t>)
         {           
@@ -164,7 +164,7 @@ struct fixed
         }
         else if constexpr(std::is_same_v<T,int64_t>)
         {
-            //handle overflow error or give warning
+            //TODO handle overflow error or give warning
         }
         return res;
     }
