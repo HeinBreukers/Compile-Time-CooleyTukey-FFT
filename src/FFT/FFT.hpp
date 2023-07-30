@@ -18,7 +18,7 @@ constexpr double pi = 3.14159265358979323846;
 
 // radix-2 Cooley-Tukey FFT 
 template<typename T, size_t size, size_t size_over2 = size/2 >
-constexpr std::array<std::complex<T>,size>  FFT(std::array<std::complex<T>,size> in) requires std::is_floating_point_v<T>
+constexpr std::array<std::complex<T>,size> FFT(std::array<std::complex<T>,size> in) requires std::is_floating_point_v<T>
 {
     if constexpr (size==1)
     {

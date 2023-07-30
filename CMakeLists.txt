@@ -20,12 +20,6 @@ FetchContent_MakeAvailable(googletest)
 
 add_subdirectory(src)
 
-include_directories(src)
-set(TEST_HEADERS
-    TestBase.hpp
-)
-
-add_subdirectory(test)
 
 
 

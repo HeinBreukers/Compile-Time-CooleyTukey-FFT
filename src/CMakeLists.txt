@@ -13,16 +13,10 @@ FetchContent_Declare(fmt
 FetchContent_MakeAvailable(fmt)
 
 include_directories(FFT)
-include_directories(FIR)
-include_directories(IIR)
-include_directories(Internal)
-include_directories(Internal/Math)
-include_directories(Internal/FixedPoint)
-include_directories(Internal/SIMD)
-include_directories(Internal/SIMD/AVX256)
-include_directories(Internal/FixedPoint)
-include_directories(Internal/Containers)
-include_directories(LazyEval)
+include_directories(Math)
+include_directories(FixedPoint)
+
+
 
 set(SOURCE_FILES main.cpp)
 
